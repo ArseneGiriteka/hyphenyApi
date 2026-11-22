@@ -13,13 +13,19 @@ from controllers.message_controller import send_message
 from controllers.register_controller import launch_register
 from controllers.update_user import update_user
 from controllers.user_data_controller import search_user_by_username
+import os
 from datetime import datetime, timedelta
 from services.messages import create_message
 
 connect(db='hyphenyApi_test', alias='core')
 
 app = Flask(__name__)
-app.config['JWT_SECRET_KEY'] = 'Me_and8_My_Homy'
+# The signing secret comes from the environment, never from the code.
+# Generate one with: python -c "import secrets; print(secrets.token_hex(32))"
+jwt_secret = os.environ.get('JWT_SECRET_KEY')
+if not jwt_secret:
+    raise RuntimeError('Set the JWT_SECRET_KEY environment variable before starting the API.')
+app.config['JWT_SECRET_KEY'] = jwt_secret
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(days=30)
 jwt = JWTManager(app)
 

@@ -38,7 +38,11 @@ git clone https://github.com/ArseneGiriteka/hyphenyApi.git
 ```
 pip install -r requierments.txt
 ```
-4. Start the flask server
+4. Set the JWT signing secret (never commit it)
+```
+export JWT_SECRET_KEY="$(python -c 'import secrets; print(secrets.token_hex(32))')"
+```
+5. Start the flask server
 ```
 python main.py
 ```
